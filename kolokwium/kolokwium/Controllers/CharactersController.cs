@@ -38,12 +38,13 @@ public class CharactersController : ControllerBase
         if (!await _dbService.CanCharacterCarryMore(id, items))
             return BadRequest("Character cannot carry these items!");
         
-        // using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-        // {
-        //     
-        //
-        //     scope.Complete();
-        // }
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await _dbService.UpdateCharactersWeight(id, items);
+            await _dbService.AddItemsToCharacter(id, items);
+        
+            scope.Complete();
+        }
         
         return Ok(items);
     }
