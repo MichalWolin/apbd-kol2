@@ -1,4 +1,5 @@
 using kolokwium.Data;
+using kolokwium.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-// builder.Services.AddScoped<IDbService, DbService>();
+builder.Services.AddScoped<IDbService, DbService>();
 
 var app = builder.Build();
 
