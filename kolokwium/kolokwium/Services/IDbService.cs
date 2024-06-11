@@ -6,4 +6,6 @@ public interface IDbService
 {
     Task<bool> DoesCharacterExist(int id);
     Task<IEnumerable<CharacterInfoDto>> GetCharacterInfo(int id);
+    Task<bool> DoesItemExist(int id);
+    Task<bool> CanCharacterCarryMore(int id, List<int> items);
 }

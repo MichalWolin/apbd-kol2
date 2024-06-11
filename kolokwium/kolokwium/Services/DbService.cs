@@ -51,4 +51,30 @@ public class DbService : IDbService
 
         return result;
     }
+
+    public async Task<bool> DoesItemExist(int id)
+    {
+        var result = await _context.Items.AnyAsync(c => c.Id.Equals(id));
+
+        return result;
+    }
+
+    public async Task<bool> CanCharacterCarryMore(int id, List<int> items)
+    {
+        var characterWeight = await _context.Characters.Where(c => c.Id.Equals(id))
+            .Select(c => c.CurrentWeight).FirstOrDefaultAsync();
+        
+        var characterMaxWeight = await _context.Characters.Where(c => c.Id.Equals(id))
+            .Select(c => c.MaxWeight).FirstOrDefaultAsync();
+
+        int itemsWeight = 0;
+
+        foreach (var item in items)
+        {
+            itemsWeight += await _context.Items.Where(i => i.Id.Equals(item))
+                .Select(i => i.Weight).FirstOrDefaultAsync();
+        }
+        
+        return itemsWeight + characterWeight <= characterMaxWeight;
+    }
 }

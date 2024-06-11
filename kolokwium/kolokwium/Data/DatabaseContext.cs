@@ -67,7 +67,7 @@ public class DatabaseContext : DbContext
                 Id = 1,
                 FirstName = "Witcher",
                 LastName = "Idk",
-                CurrentWeight = 100,
+                CurrentWeight = 23,
                 MaxWeight = 120
             },
             new Character
@@ -75,7 +75,7 @@ public class DatabaseContext : DbContext
                 Id = 2,
                 FirstName = "Ciri",
                 LastName = "smh",
-                CurrentWeight = 50,
+                CurrentWeight = 8,
                 MaxWeight = 60
             }
         });
