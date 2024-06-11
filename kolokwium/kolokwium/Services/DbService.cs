@@ -67,6 +67,40 @@ public class DbService : IDbService
         var characterMaxWeight = await _context.Characters.Where(c => c.Id.Equals(id))
             .Select(c => c.MaxWeight).FirstOrDefaultAsync();
 
+        var itemsWeight = await CalculateItemsWeight(items);
+        
+        return itemsWeight + characterWeight <= characterMaxWeight;
+    }
+
+    public async Task AddItemsToCharacter(int id, List<int> items)
+    {
+        foreach (var item in items)
+        {
+            var backpack = new Backpack
+            {
+                CharacterId = id,
+                ItemId = id
+            };
+
+            await _context.Backpacks.AddAsync(backpack);
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateCharactersWeight(int id, List<int> items)
+    {
+        var itemsWeight = await CalculateItemsWeight(items);
+        
+        var characterWeight = await _context.Characters.Where(c => c.Id.Equals(id))
+            .Select(c => c.CurrentWeight).FirstOrDefaultAsync();
+
+        //var character _context.Characters.Where(c => c.Id.Equals(id))
+            //.Select(c => c.CurrentWeight = itemsWeight + characterWeight);
+    }
+
+    public async Task<int> CalculateItemsWeight(List<int> items)
+    {
         int itemsWeight = 0;
 
         foreach (var item in items)
@@ -74,7 +108,7 @@ public class DbService : IDbService
             itemsWeight += await _context.Items.Where(i => i.Id.Equals(item))
                 .Select(i => i.Weight).FirstOrDefaultAsync();
         }
-        
-        return itemsWeight + characterWeight <= characterMaxWeight;
+
+        return itemsWeight;
     }
 }
